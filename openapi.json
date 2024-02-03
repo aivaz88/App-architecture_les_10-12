@@ -1,0 +1,299 @@
+{
+  "openapi": "3.0.3",
+  "info": {
+    "title": "API для робота-пылесоса",
+    "version": "0.0.1"
+  },
+  "servers": [
+    {
+      "url": "http://localhost:8080/api/v1",
+      "description": "Localhost"
+    }
+  ],
+  "paths": {
+    "/login": {
+      "post": {
+        "summary": "Авторизация пользователя",
+        "tags": [
+          "Login"
+        ],
+        "operationId": "loginUser",
+        "parameters": [
+          {
+            "name": "login",
+            "in": "query",
+            "description": "Логин пользователя",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "hashPassword",
+            "in": "query",
+            "description": "Хэш пароля пользователя",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Успешная авторизация пользователя",
+            "content": {
+              "adplication/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/User"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Все остальное",
+            "content": {
+              "adplication/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/registration": {
+      "post": {
+        "summary": "Регистрация пользователя",
+        "tags": [
+          "Registration"
+        ],
+        "operationId": "RegistrationUser",
+        "parameters": [
+          {
+            "name": "login",
+            "in": "query",
+            "description": "Логин пользователя",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "email",
+            "in": "query",
+            "description": "Почта пользователя",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "hashPassword",
+            "in": "query",
+            "description": "Хэш пароля пользователя",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Успешная регистрация пользователя",
+            "content": {
+              "adplication/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/User"
+                }
+              }
+            }
+          },
+          "default": {
+            "description": "Все остальное",
+            "content": {
+              "adplication/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/start/{idRobot}": {
+      "put": {
+        "summary": "Запуск робота по id",
+        "operationId": "startRobotById",
+        "tags": [
+          "Robots"
+        ],
+        "parameters": [
+          {
+            "name": "idRobot",
+            "in": "path",
+            "required": true,
+            "description": "id Робота который надо запустить",
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Робот запущен",
+            "content": {
+              "adplication/json": {}
+            }
+          },
+          "default": {
+            "description": "Все остальное",
+            "content": {
+              "adplication/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/delrobot/{idRobot}": {
+      "delete": {
+        "summary": "Удаление робота по id",
+        "operationId": "deleteRobotById",
+        "tags": [
+          "Robots"
+        ],
+        "parameters": [
+          {
+            "name": "idRobot",
+            "in": "path",
+            "required": true,
+            "description": "id робота",
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Успешное удаление робота",
+            "content": {
+              "adplication/json": {}
+            }
+          },
+          "default": {
+            "description": "Все остальное",
+            "content": {
+              "adplication/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Error"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "Robot": {
+        "type": "object",
+        "required": [
+          "id",
+          "model",
+          "fabricNumber",
+          "version",
+          "macAdress",
+          "idGroupUser",
+          "comment",
+          "resourse",
+          "status"
+        ],
+        "properties": {
+          "id": {
+            "type": "integer",
+            "example": 1,
+            "description": "id робота"
+          },
+          "model": {
+            "type": "string",
+            "example": "r500",
+            "description": "модель робота"
+          },
+          "farbicNumber": {
+            "type": "string",
+            "example": "R000001",
+            "description": "заводской номер"
+          },
+          "version": {
+            "type": "string",
+            "example": 1,
+            "description": "версия ПО"
+          },
+          "macAdress": {
+            "type": "string"
+          },
+          "idGroupUser": {
+            "type": "integer"
+          },
+          "comment": {
+            "type": "string"
+          },
+          "resours": {
+            "type": "integer",
+            "description": "Пробег робота"
+          },
+          "status": {
+            "type": "string",
+            "example": "worked"
+          }
+        }
+      },
+      "User": {
+        "type": "object",
+        "required": [
+          "id",
+          "login",
+          "email",
+          "hashPassword"
+        ],
+        "properties": {
+          "id": {
+            "type": "integer",
+            "example": 1
+          },
+          "login": {
+            "type": "string"
+          },
+          "email": {
+            "type": "string"
+          },
+          "hashPassword": {
+            "type": "string"
+          }
+        }
+      },
+      "Error": {
+        "type": "object",
+        "required": [
+          "codError",
+          "messageError"
+        ],
+        "properties": {
+          "codError": {
+            "type": "string",
+            "example": "123qwe456"
+          },
+          "messageError": {
+            "type": "string"
+          }
+        }
+      }
+    }
+  }
+}
